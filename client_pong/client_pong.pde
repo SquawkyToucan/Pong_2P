@@ -4,7 +4,12 @@ Client client;
 boolean isLeftSide = false;
 boolean isRightSide = false;
 int dataIn;
-// A D D V A R I A B L E S F R O M T H E S E R V E R S O I T W O R K S A N D D O E S N T F L I C K E R Y O U I D I O T
+int ballX;
+int ballY;
+int leftPaddleY;
+int rightPaddleY;
+int leftPoints;
+int rightPoints;
 
 void setup() {
   size(500, 500);
@@ -14,6 +19,14 @@ void setup() {
 
 void draw() {
   background(0, 136, 102);
+  // Actually drawing the stuff
+  // Drawing the ball
+  fill(255, 255, 255);
+  rect(ballX, ballY, 10, 10);
+  // Left paddle
+  rect(10, leftPaddleY, 10, 50);
+  // Right paddle
+  rect(480, rightPaddleY, 10, 50);
   // Getting stuff from the server
   if(client.available() > 0) {
      dataIn = client.read();
@@ -23,16 +36,18 @@ void draw() {
        dataIn = client.read(); // clearing out size
        ballLocation[0] = client.read();
        ballLocation[1] = client.read();
-       fill(255, 255, 255);
-       rect(ballLocation[0] * 2, ballLocation[1] * 2, 10, 10);
+       ballX = ballLocation[0] * 2;
+       ballY = ballLocation[1] * 2;
      }
      else if(dataIn == 1) {
        // the x position for the left paddle is 10, it is 10 wide and 50 long
        dataIn = client.read(); // clearing out size
-       rect(10, client.read(), 10, 50);
+       leftPaddleY = client.read();
      }
      else if(dataIn == 2) {
        // the x position for the right paddle is 480, it is 10 wide and 50 long
+       dataIn = client.read();
+       rightPaddleY = client.read();
      }
      else if(dataIn == 3) {
        
